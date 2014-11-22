@@ -1,7 +1,7 @@
-library oauth.token;
+library oauth.token_nonbrowser;
 import 'dart:convert';
 import 'dart:typed_data';
-import 'utils.dart' as utils;
+import 'utils_nonbrowser.dart' as utils;
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:cipher/cipher.dart';
 import 'package:cipher/random/secure_random_base.dart';

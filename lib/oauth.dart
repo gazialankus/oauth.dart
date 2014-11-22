@@ -4,10 +4,11 @@
 library oauth;
 
 export 'package:oauth/client.dart' show 
+  BrowserClient, 
   Client, 
   generateParameters,
   produceAuthorizationHeader,
-  signRequest,
+  signRequest, 
   Tokens;
 
 export 'package:oauth/server.dart' show 

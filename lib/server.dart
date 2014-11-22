@@ -3,10 +3,11 @@ library oauth.server;
 import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:oauth/src/token.dart';
+import 'package:oauth/src/token_nonbrowser.dart';
 import 'package:oauth/src/core.dart';
 import 'package:oauth/src/utils.dart';
-export 'package:oauth/src/token.dart' show Tokens;
+import 'package:oauth/src/utils_nonbrowser.dart';
+export 'package:oauth/src/token_nonbrowser.dart' show Tokens;
 
 final _paramRegex = new RegExp(r'^\s*(\w+)\s*=\s*"([^"]*)"\s*$');
 class _NotAuthorized implements Exception {}

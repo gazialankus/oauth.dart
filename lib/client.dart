@@ -2,13 +2,14 @@
  */
 library oauth.client;
 import 'dart:async';
-import 'dart:io';
 import 'package:oauth/src/utils.dart';
+import 'package:oauth/src/utils_browser.dart';
 import 'package:oauth/src/core.dart';
-import 'package:oauth/src/token.dart';
+import 'package:oauth/src/token_browser.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/browser_client.dart' as httpb;
 import 'package:crypto/crypto.dart' as crypto;
-export 'package:oauth/src/token.dart' show Tokens;
+export 'package:oauth/src/token_browser.dart' show Tokens;
 
 /** Generate the parameters to be included in the `Authorization:` header of a
  *  request. Generally you should prefer use of [signRequest] or [Client] 
@@ -32,11 +33,12 @@ Map<String, String> generateParameters(
   List<Parameter> requestParams = new List<Parameter>();
   requestParams.addAll(mapParameters(request.url.queryParameters));
   requestParams.addAll(mapParameters(params));
-  
-  if(request.contentLength != 0
-      && ContentType.parse(request.headers["Content-Type"]).mimeType == "application/x-www-form-urlencoded") {
-    requestParams.addAll(mapParameters(request.bodyFields));
-  } 
+  print(params);
+  // I believe these may be unnecessary. They don't work in the browser, anyway.
+//  if(request.contentLength != 0
+//      && ContentType.parse(request.headers["Content-Type"]).mimeType == "application/x-www-form-urlencoded") {
+//    requestParams.addAll(mapParameters(request.bodyFields));
+//  } 
   
   var sigBase = computeSignatureBase(request.method, request.url, requestParams);
   params["oauth_signature"] = crypto.CryptoUtils.bytesToBase64(tokens.sign(sigBase));
@@ -101,4 +103,20 @@ class Client extends http.BaseClient {
                   new DateTime.now().millisecondsSinceEpoch ~/ 1000);
       return _client.send(request);
     }
+}
+
+class BrowserClient extends httpb.BrowserClient {
+  Tokens tokens;
+  
+  BrowserClient(this.tokens);
+  
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    var nonce = getRandomBytes(8);
+    String nonceStr = crypto.CryptoUtils.bytesToBase64(nonce, urlSafe: true);
+    var timeStamp = new DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    signRequest(request, tokens, nonceStr, timeStamp);
+    return super.send(request);
+  }
+  
 }
