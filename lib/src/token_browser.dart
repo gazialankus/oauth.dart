@@ -13,6 +13,8 @@ abstract class Tokens {
   /// The token (public) ID
   String get consumerId;
   String get userId;
+  String get userSecret;
+  String verifier;
   
   /// The type of the token
   String get type;

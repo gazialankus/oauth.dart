@@ -23,6 +23,7 @@ Map<String, String> generateParameters(
   params["oauth_consumer_key"] = tokens.consumerId;
   if(tokens.userId != null) {
     params["oauth_token"] = tokens.userId;
+    params["oauth_verifier"] = tokens.verifier;
   }
   
   params["oauth_signature_method"] = tokens.type;
