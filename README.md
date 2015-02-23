@@ -1,3 +1,6 @@
+Notice: this is a fork by @gazialankus. It works in the browser. 
+
+
 An implementation of OAuth 1.0a, as per RFC 5849. 
 
 The client portion is designed for use with the http 
